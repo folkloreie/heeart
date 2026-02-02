@@ -1,1364 +1,1311 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
-  <title>Loveprint</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Happy Valentine's Day</title>
 
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Nunito:wght@600;700;800&display=swap" rel="stylesheet">
+<!-- Fonts (script untuk "Valentine's" + clean untuk lainnya) -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 
-  <style>
-    :root{
-      --stripeA: rgba(255, 170, 200, 0.30);
-      --stripeB: rgba(255, 170, 200, 0.10);
-      --paper: #fffafd;
+<style>
+/* =========================================================
+   THEME / VARIABLES
+========================================================= */
+:root{
+  --pink-0:#ffe1ea;
+  --pink-1:#ffd2e0;
+  --pink-2:#ffb2c9;
+  --pink-3:#ff8fb4;
+  --pink-4:#ff6a9b;
 
-      --panel: rgba(255, 214, 229, 0.74);
-      --panelBorder: rgba(255,255,255,0.85);
+  --rose-1:#c23a5b;
+  --rose-2:#b23353;
+  --rose-3:#9e2945;
 
-      --ink: #ff3f86;
-      --ink2:#ff86ad;
+  --white:#ffffff;
+  --white-soft:#fff7fb;
+  --glass:rgba(255,255,255,.88);
 
-      --title:#c22b66;
-      --text:#3b2f3a;
-      --muted:#7a6372;
+  --shadow-1: 0 16px 35px rgba(0,0,0,.12);
+  --shadow-2: 0 24px 60px rgba(0,0,0,.18);
+  --shadow-pink: 0 18px 40px rgba(255,106,155,.22);
 
-      --btnBg: rgba(255, 255, 255, 0.90);
-      --btnBorder: rgba(255,255,255,0.96);
+  --radius-1: 18px;
+  --radius-2: 22px;
+  --radius-3: 28px;
 
-      --shadow: 0 18px 42px rgba(60, 20, 50, 0.16);
-      --shadow2: 0 10px 18px rgba(60, 20, 50, 0.10);
-    }
-
-    *{ box-sizing:border-box; margin:0; padding:0; }
-    html,body{ height:100%; }
-
-    body{
-      font-family: "Baloo 2", "Nunito", ui-rounded, system-ui, -apple-system, "Segoe UI", Roboto, Arial;
-      color: var(--text);
-      overflow:hidden;
-
-      background:
-        linear-gradient(to right,
-          var(--stripeA) 0px,   var(--stripeA) 6px,
-          transparent 6px,      transparent 26px,
-          var(--stripeB) 26px,  var(--stripeB) 34px,
-          transparent 34px,     transparent 54px
-        ),
-        radial-gradient(1200px 800px at 50% 10%, rgba(255,255,255,0.85), transparent 60%),
-        linear-gradient(180deg, var(--paper), #ffffff);
-      background-size: 54px 100%, auto, auto;
-      background-position: 0 0, center, center;
-    }
-
-    .page{
-      position:relative;
-      height:100%;
-      width:100%;
-      display:none;
-      align-items:center;
-      justify-content:center;
-      padding:
-        max(16px, env(safe-area-inset-top))
-        14px
-        max(16px, env(safe-area-inset-bottom));
-    }
-    .page.active{ display:flex; }
-
-    /* Page letter must scroll */
-    #pageLetter{
-  height: 100%;
-  overflow: hidden;   /* ⛔ page gak boleh scroll */
-}
-    #pageLetter.active{ display:block; } /* not flex */
-
-    /* ===== Shared top hint ===== */
-    .hint{
-      position:absolute;
-      top: max(16px, env(safe-area-inset-top));
-      left:50%;
-      transform:translateX(-50%);
-      text-align:center;
-      width:min(560px, 92vw);
-      padding:0 10px;
-      user-select:none;
-      z-index: 5;
-    }
-    .hint .title{
-      font-weight:800;
-      letter-spacing:.2px;
-      font-size:16px;
-      color: var(--title);
-      text-shadow: 0 6px 16px rgba(255, 63, 134, 0.10);
-    }
-    .hint .sub{
-      margin-top:6px;
-      font-size:13.2px;
-      color:var(--muted);
-      line-height:1.35;
-      font-weight:700;
-    }
-
-    /* ===== Page 1: Loveprint Panel ===== */
-    .love-panel{
-      position:absolute;
-      top:50%;
-      left:50%;
-      transform:translate(-50%,-58%);
-      width:min(380px, 88vw);
-      aspect-ratio: 1 / 1;
-      border-radius: 28px;
-      background: var(--panel);
-      border: 1px solid var(--panelBorder);
-      box-shadow: var(--shadow);
-      backdrop-filter: blur(10px);
-      overflow:hidden;
-      opacity:1;
-      pointer-events:auto;
-      will-change: transform, opacity;
-      z-index: 2;
-    }
-
-    .glow-halo{
-      position:absolute;
-      inset:-22px;
-      border-radius:30px;
-      filter: blur(18px);
-      opacity:.92;
-      background:
-        radial-gradient(circle at 40% 35%, rgba(255,184,208,.62), transparent 55%),
-        radial-gradient(circle at 60% 65%, rgba(255,255,255,.55), transparent 55%),
-        radial-gradient(circle at 55% 40%, rgba(255,134,173,.34), transparent 60%);
-      pointer-events:none;
-    }
-
-    .love-svg{
-      position:absolute;
-      inset:0;
-      padding:18px;
-      pointer-events:none;
-    }
-    svg{ width:100%; height:100%; display:block; }
-
-    .ridge{
-      fill:none;
-      stroke: var(--ink);
-      stroke-width: 1.85;
-      stroke-linecap: round;
-      stroke-linejoin: round;
-      filter:
-        drop-shadow(0 0 6px rgba(255,184,208,.78))
-        drop-shadow(0 0 18px rgba(255,63,134,.20));
-      opacity:.98;
-    }
-    .ridge.soft{
-      stroke: var(--ink2);
-      opacity:.86;
-      stroke-width: 1.55;
-      filter:
-        drop-shadow(0 0 5px rgba(255,184,208,.65))
-        drop-shadow(0 0 14px rgba(255,63,134,.12));
-    }
-
-    .love-panel.pulsing{
-      animation: heartBeatPanel 1.15s ease-in-out 0s 2;
-    }
-    .love-panel.pulsing .glow-halo{
-      animation: glowBeat 1.15s ease-in-out 0s 2;
-    }
-    @keyframes heartBeatPanel{
-      0%   { transform:translate(-50%,-58%) scale(1); }
-      20%  { transform:translate(-50%,-58%) scale(1.02); }
-      40%  { transform:translate(-50%,-58%) scale(0.995); }
-      62%  { transform:translate(-50%,-58%) scale(1.03); }
-      100% { transform:translate(-50%,-58%) scale(1); }
-    }
-    @keyframes glowBeat{
-      0%   { opacity:.85; transform: scale(0.98); }
-      20%  { opacity:1;   transform: scale(1.04); }
-      40%  { opacity:.82; transform: scale(1.00); }
-      62%  { opacity:1;   transform: scale(1.06); }
-      100% { opacity:.9;  transform: scale(1.00); }
-    }
-    .love-panel.unlocking{
-      transition: transform 720ms cubic-bezier(.2,.9,.2,1), opacity 520ms ease;
-      transform:translate(-50%,-78%) scale(0.90);
-    }
-
-/* ===== Idle heartbeat (after unlocked) ===== */
-.love-panel.idle{
-  /* posisi harus sama kayak unlocking biar gak lompat */
-  transform: translate(-50%,-78%) scale(0.90);
-  animation: idlePulse 1.8s ease-in-out infinite;
-}
-.love-panel.idle .glow-halo{
-  animation: idleGlow 1.8s ease-in-out infinite;
+  --card-w: min(420px, 92vw);
+  --card-h: min(860px, 92vh);
 }
 
-@keyframes idlePulse{
-  0%, 100% { transform: translate(-50%,-78%) scale(0.90); }
-  50%      { transform: translate(-50%,-78%) scale(0.93); }
+/* =========================================================
+   RESET
+========================================================= */
+*{ margin:0; padding:0; box-sizing:border-box; }
+html, body{
+  width:100%;
+  height:100%;
+  overflow:hidden;
+  font-family: "Poppins", system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+
+  /* background "editor-ish" agar kartu di tengah terasa seperti screenshot */
+  background: linear-gradient(135deg, rgba(116,152,255,.55), rgba(128,220,255,.35), rgba(255,255,255,.85));
 }
-@keyframes idleGlow{
-  0%, 100% { opacity: .85; transform: scale(1.00); }
-  50%      { opacity: 1;   transform: scale(1.06); }
+
+button{ font-family: inherit; }
+
+/* =========================================================
+   APP / ARTBOARD
+========================================================= */
+#app{
+  width:100%;
+  height:100%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding: 18px;
+}
+.artboard{
+  width: var(--card-w);
+  height: var(--card-h);
+  border-radius: var(--radius-3);
+  overflow:hidden;
+  position:relative;
+
+  /* pink dreamy bg */
+  background: linear-gradient(180deg, var(--pink-0), var(--pink-2) 55%, var(--pink-3));
+  box-shadow: var(--shadow-2);
 }
 
-    /* Confetti */
-    .confetti{
-      position:absolute;
-      inset:0;
-      pointer-events:none;
-      overflow:hidden;
-      z-index: 6;
-    }
-    .confetti i{
-      position:absolute;
-      top:-10%;
-      width:10px;
-      height:18px;
-      border-radius:8px;
-      opacity:0;
-      transform: translate3d(0,0,0) rotate(0deg);
-      filter: drop-shadow(0 6px 10px rgba(60,20,50,.10));
-      animation: confFall var(--dur) cubic-bezier(.15,.8,.25,1) var(--delay) forwards;
-    }
-    .confetti i.dot{ width:8px; height:8px; border-radius:999px; }
-    .confetti i.line{ width:6px; height:20px; border-radius:999px; }
-    .confetti i.miniheart{
-      width:12px; height:12px; border-radius:0;
-      clip-path: polygon(50% 85%, 8% 48%, 8% 26%, 22% 14%, 36% 18%, 50% 32%, 64% 18%, 78% 14%, 92% 26%, 92% 48%);
-    }
-    @keyframes confFall{
-      0%   { opacity:0; transform: translate3d(var(--x), -30px, 0) rotate(var(--r)); }
-      10%  { opacity:1; }
-      100% { opacity:0; transform: translate3d(calc(var(--x) + var(--drift)), 100vh, 0) rotate(calc(var(--r) + 480deg)); }
-    }
-
-    /* Access granted card */
-    .card{
-      position:absolute;
-      left:50%;
-      top:50%;
-      transform: translate(-50%,-8%);
-      width:min(400px, 92vw);
-      padding:16px 16px 14px;
-      border-radius:22px;
-      background: rgba(255,255,255,0.88);
-      border: 1px solid rgba(255,255,255,0.94);
-      box-shadow: var(--shadow);
-      backdrop-filter: blur(10px);
-      opacity:0;
-      translate: 0 18px;
-      transition: opacity 420ms ease, translate 420ms ease;
-      pointer-events:none;
-      z-index: 3;
-    }
-    .card.show{ opacity:1; translate: 0 0; }
-
-    .card .badge{
-      display:inline-flex;
-      align-items:center;
-      gap:8px;
-      padding:8px 10px;
-      border-radius:999px;
-      background: linear-gradient(135deg, rgba(255,214,229,.65), rgba(255,255,255,.72));
-      border: 1px solid rgba(255,255,255,0.92);
-      box-shadow: var(--shadow2);
-      font-weight:800;
-      font-size:12px;
-      letter-spacing:.35px;
-      color: #7a2950;
-    }
-    .badge svg{ width:16px; height:16px; }
-
-    .card .msg{
-      margin-top:12px;
-      font-size:16px;
-      line-height:1.45;
-      font-weight:800;
-      min-height: 60px;
-      color:#3a2431;
-    }
-    .card .sub{
-      margin-top:8px;
-      font-size:13.2px;
-      color:var(--muted);
-      line-height:1.45;
-      font-weight:700;
-    }
-
-    .caret{
-      display:inline-block;
-      width:8px;
-      height:1em;
-      border-left:2px solid rgba(59,47,58,.55);
-      margin-left:3px;
-      translate: 0 2px;
-      animation: caretBlink 1s steps(2,end) infinite;
-    }
-    @keyframes caretBlink{ 50%{ opacity:0; } }
-
-    /* Hold button (page 1) */
-    .hold-btn{
-      position:absolute;
-      bottom: max(16px, env(safe-area-inset-bottom));
-      left:50%;
-      transform:translateX(-50%);
-      border:none;
-      background:transparent;
-      cursor:pointer;
-      user-select:none;
-      -webkit-tap-highlight-color: transparent;
-      touch-action: none;
-      width:min(440px, 92vw);
-      z-index: 4;
-    }
-    .btn-pill{
-      display:flex;
-      align-items:center;
-      gap:12px;
-      padding:14px 16px;
-      border-radius:999px;
-      background: var(--btnBg);
-      border: 1px solid var(--btnBorder);
-      box-shadow: var(--shadow);
-      backdrop-filter: blur(10px);
-      position:relative;
-      overflow:hidden;
-      transition: transform 120ms ease, box-shadow 180ms ease;
-    }
-    .btn-pill::before{
-      content:"";
-      position:absolute;
-      inset:-40px -60px;
-      background: linear-gradient(120deg, transparent 20%, rgba(255,255,255,.55) 45%, transparent 70%);
-      transform: translateX(-60%);
-      animation: sheen 4.8s ease-in-out infinite;
-      opacity:.55;
-    }
-    @keyframes sheen{
-      0%, 65% { transform: translateX(-70%) rotate(10deg); }
-      100%    { transform: translateX(60%) rotate(10deg); }
-    }
-    .btn-icon{
-      width:50px;
-      height:50px;
-      border-radius:16px;
-      background: linear-gradient(135deg, rgba(255,214,229,.76), rgba(255,255,255,.86));
-      border: 1px solid rgba(255,255,255,.94);
-      box-shadow: var(--shadow2);
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      flex:0 0 auto;
-      position:relative;
-      z-index:1;
-    }
-    .btn-icon .emoji{
-      font-size:26px;
-      line-height:1;
-      filter: drop-shadow(0 6px 10px rgba(60,20,50,.12));
-      transform: translateY(1px);
-    }
-    .btn-text{
-      position:relative;
-      z-index:1;
-      flex:1;
-      text-align:left;
-      line-height:1.2;
-    }
-    .btn-text .big{
-      font-weight:800;
-      font-size:15px;
-      letter-spacing:.2px;
-      color:#6f244a;
-    }
-    .btn-text .small{
-      margin-top:3px;
-      font-weight:800;
-      font-size:13px;
-      color:rgba(122, 99, 114, .95);
-    }
-    .progress-pill{
-      position:absolute;
-      left:14px; right:14px; bottom:8px;
-      height:6px;
-      border-radius:999px;
-      overflow:hidden;
-      background: rgba(255, 214, 229, 0.35);
-      border: 1px solid rgba(255,255,255,.70);
-    }
-    .progress-bar{
-      height:100%;
-      width:0%;
-      background: linear-gradient(90deg, rgba(255,63,134,.70), rgba(255,184,208,.88), rgba(255,255,255,.78));
-      border-radius:999px;
-      transition: width 60ms linear;
-    }
-    .holding .btn-pill{
-      transform: translateY(1px) scale(0.992);
-      box-shadow: 0 14px 30px rgba(60, 20, 50, 0.18);
-    }
-
-    /* Floating open-letter button (page 1) */
-    .letter-float-btn{
-      position: fixed;
-      right: 14px;
-      bottom: calc(max(16px, env(safe-area-inset-bottom)) + 86px);
-      z-index: 9999;
-
-      border: none;
-      cursor: pointer;
-      border-radius: 999px;
-      padding: 12px 14px;
-
-      font-family: inherit;
-      font-weight: 900;
-      letter-spacing: .2px;
-      font-size: 13px;
-
-      color: #6f244a;
-      background: rgba(255,255,255,0.92);
-      border: 1px solid rgba(255,255,255,0.96);
-      box-shadow: var(--shadow2);
-      backdrop-filter: blur(10px);
-
-      opacity: 0;
-      transform: translateY(10px);
-      pointer-events: none;
-      transition: opacity 260ms ease, transform 260ms ease;
-    }
-  
-    body.on-letter #goLetterBtn{
-  opacity: 0 !important;
-  transform: translateY(10px) !important;
-  pointer-events: none !important;
+/* =========================================================
+   PAGE SYSTEM
+========================================================= */
+.page{
+  position:absolute;
+  inset:0;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  transition: opacity .65s ease, transform .65s ease;
+  opacity:1;
+  transform: translateY(0);
 }
-  
-    .letter-float-btn.show{
-      opacity: 1;
-      transform: translateY(0);
-      pointer-events: auto;
-    }
-    .letter-float-btn:active{
-      transform: translateY(1px) scale(0.99);
-    }
+.page.hidden{
+  opacity:0;
+  pointer-events:none;
+  transform: translateY(12px);
+}
 
-    /* ===== Page 2 ===== */
-    .letter-stage{
-      height: 100%;                 /* 🔑 kunci 1 layar */
-      width: min(560px, 92vw);
-      margin: 0 auto;
-      padding: 16px 0;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 12px;
+/* =========================================================
+   BACKGROUND DECOR — SPARKLES (bintang) + DOTS + OUTLINE HEARTS
+========================================================= */
+.decor-layer{
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+}
+
+/* dot particles (soft) */
+.dot{
+  position:absolute;
+  width:6px; height:6px;
+  border-radius:999px;
+  background: rgba(255,255,255,.40);
+  filter: blur(.2px);
+  animation: floatDot 6s ease-in-out infinite;
+}
+@keyframes floatDot{
+  0%,100%{ transform: translateY(0) scale(.9); opacity:.35; }
+  50%{ transform: translateY(-10px) scale(1.05); opacity:.55; }
+}
+
+/* star sparkles (4/8 points) via inline SVG injected in HTML */
+.star{
+  position:absolute;
+  width:18px;
+  height:18px;
+  opacity:.75;
+  filter: drop-shadow(0 0 10px rgba(255,255,255,.45));
+  animation: twinkle 2.8s ease-in-out infinite;
+}
+.star.s2{ width:14px; height:14px; opacity:.55; animation-duration: 3.4s; }
+.star.s3{ width:10px; height:10px; opacity:.45; animation-duration: 4.0s; }
+@keyframes twinkle{
+  0%,100%{ transform: scale(.82) rotate(0deg); opacity:.35; }
+  50%{ transform: scale(1.25) rotate(8deg); opacity:1; }
+}
+
+/* outline hearts (like Canva) */
+.heart-outline{
+  position:absolute;
+  width:180px;
+  height:180px;
+  border:2px solid rgba(255,255,255,.55);
+  border-radius: 26px;
+  clip-path: path("M90 160 C22 112 8 72 26 48 C44 24 75 30 90 54 C105 30 136 24 154 48 C172 72 158 112 90 160 Z");
+  opacity:.35;
+}
+.heart-outline.small{ width:90px; height:90px; opacity:.25; }
+.heart-outline.tiny{ width:60px; height:60px; opacity:.22; }
+
+/* =========================================================
+   CLOUD SHAPES (side + bottom) — pure SVG
+========================================================= */
+.cloud-side{
+  position:absolute;
+  top: 120px;
+  width: 220px;
+  height: 540px;
+  opacity: .78;
+  filter: blur(.15px);
+}
+.cloud-side.left{ left:-70px; }
+.cloud-side.right{ right:-70px; transform: scaleX(-1); }
+
+.cloud-bottom{
+  position:absolute;
+  left:-10%;
+  bottom:-70px;
+  width: 120%;
+  height: 260px;
+  opacity: .92;
+  filter: drop-shadow(0 12px 30px rgba(255,106,155,.18));
+}
+
+/* =========================================================
+   LANDING CONTENT — MATCH CANVA STYLE
+========================================================= */
+.landing-wrap{
+  width:100%;
+  height:100%;
+  padding: 54px 22px 34px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:flex-start;
+  position:relative;
+}
+
+/* cupid doodle */
+.cupid{
+  width:64px; height:64px;
+  margin-top: 6px;
+  opacity:.85;
+  filter: drop-shadow(0 8px 16px rgba(0,0,0,.10));
+}
+
+/* fluffy cloud-heart container */
+.cloud-heart{
+  width: 92%;
+  max-width: 360px;
+  height: 320px;
+  margin-top: 10px;
+  position:relative;
+  filter: drop-shadow(0 18px 35px rgba(0,0,0,.12));
+}
+
+/* texts over heart */
+.txt-happy{
+  position:absolute;
+  top: 92px;
+  left:0; right:0;
+  text-align:center;
+  letter-spacing: 6px;
+  font-weight: 700;
+  font-size: 14px;
+  color: rgba(178,45,79,.80);
+}
+.txt-val{
+  position:absolute;
+  top: 118px;
+  left:0; right:0;
+  text-align:center;
+  font-family: "Great Vibes", cursive;
+  font-size: 84px;
+  color: rgba(178,45,79,.94);
+  text-shadow: 0 12px 22px rgba(0,0,0,.12);
+}
+.txt-day{
+  position:absolute;
+  top: 226px;
+  left:0; right:0;
+  text-align:center;
+  letter-spacing: 5px;
+  font-weight: 700;
+  font-size: 14px;
+  color: rgba(178,45,79,.80);
+}
+.val-heart{
+  position:absolute;
+  top: 206px;
+  left:50%;
+  transform: translateX(-50%);
+  width: 28px;
+  height: 28px;
+  opacity:.9;
+}
+
+/* start button like Canva */
+.start-btn{
+  margin-top: 20px;
+  background: rgba(255,255,255,.88);
+  border: 2px solid rgba(255,255,255,.55);
+  border-radius: 999px;
+  padding: 12px 46px;
+  font-weight: 800;
+  letter-spacing: 2px;
+  font-size: 16px;
+  color: rgba(178,45,79,.92);
+  box-shadow: var(--shadow-1);
+  cursor:pointer;
+  position:relative;
+  transition: transform .15s ease, box-shadow .2s ease;
+}
+.start-btn:hover{ transform: translateY(-1px); box-shadow: 0 20px 40px rgba(0,0,0,.14); }
+.start-btn:active{ transform: scale(.98); }
+.start-btn::before{
+  content:"";
+  position:absolute;
+  left: 18px;
+  top: 10px;
+  bottom: 10px;
+  width: 2px;
+  background: rgba(178,45,79,.28);
+  border-radius: 10px;
+}
+
+.landing-caption{
+  margin-top: 14px;
+  text-align:center;
+  font-size: 12px;
+  font-weight: 700;
+  color: rgba(255,255,255,.92);
+  letter-spacing: 1.8px;
+  text-transform: uppercase;
+}
+.landing-subcaption{
+  margin-top: 6px;
+  text-align:center;
+  font-size: 11px;
+  color: rgba(255,255,255,.78);
+}
+
+/* =========================================================
+   QUESTION PAGE — keep dreamy, not plain
+========================================================= */
+.question-wrap{
+  width:100%;
+  height:100%;
+  padding: 40px 18px 30px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap: 12px;
+  position:relative;
+}
+
+.chibi{
+  width: 230px;
+  height: 230px;
+  object-fit: contain;
+  filter: drop-shadow(0 18px 30px rgba(0,0,0,.18));
+}
+
+.bubble{
+  width: 92%;
+  max-width: 360px;
+  background: rgba(255,255,255,.90);
+  border: 2px solid rgba(255,255,255,.55);
+  border-radius: 20px;
+  padding: 14px 14px;
+  box-shadow: var(--shadow-1);
+  text-align:center;
+  color: rgba(178,45,79,.92);
+  position:relative;
+}
+.bubble::after{
+  content:"";
+  position:absolute;
+  left:50%;
+  bottom:-12px;
+  transform: translateX(-50%);
+  width:0; height:0;
+  border-left: 14px solid transparent;
+  border-right: 14px solid transparent;
+  border-top: 14px solid rgba(255,255,255,.90);
+  filter: drop-shadow(0 6px 12px rgba(0,0,0,.10));
+}
+.bubble h2{ font-size: 20px; font-weight: 900; letter-spacing: .2px; }
+.bubble p{ margin-top:6px; font-size: 12px; opacity:.9; }
+
+.controls{
+  width: 92%;
+  max-width: 360px;
+  height: 130px;
+  position:relative;
+  margin-top: 10px;
+}
+
+.btn{
+  position:absolute;
+  border:none;
+  border-radius: 999px;
+  padding: 12px 34px;
+  font-weight: 900;
+  letter-spacing: 1.6px;
+  cursor:pointer;
+  transition: transform .15s ease, box-shadow .2s ease;
+}
+.btn-yes{
+  left:0;
+  background: var(--pink-4);
+  color: white;
+  box-shadow: 0 18px 35px rgba(255,106,155,.32);
+}
+.btn-yes:hover{ transform: translateY(-1px) scale(1.02); }
+.btn-no{
+  right:0;
+  background: rgba(255,255,255,.90);
+  border: 2px solid rgba(255,255,255,.55);
+  color: rgba(178,45,79,.92);
+  box-shadow: var(--shadow-1);
+}
+.btn-no:hover{ transform: translateY(-1px) scale(1.02); }
+
+/* YES glow after error close */
+.glow{
+  animation: glowPulse 1.0s ease-in-out infinite alternate;
+}
+@keyframes glowPulse{
+  from{
+    box-shadow: 0 0 0 rgba(255,106,155,0), 0 18px 35px rgba(255,106,155,.30);
+    transform: translateY(0);
   }
-
-    .back-btn{
-      position: fixed; /* ✅ ngambang, gak ganggu layout */
-      top: max(16px, env(safe-area-inset-top));
-      left: 14px;
-      z-index: 9999;
-
-      border:none;
-      cursor:pointer;
-      border-radius:999px;
-      padding:10px 12px;
-      font-family: inherit;
-      font-weight:900;
-      letter-spacing:.2px;
-      font-size:13px;
-      color:#6f244a;
-      background: rgba(255,255,255,0.88);
-      border: 1px solid rgba(255,255,255,0.95);
-      box-shadow: var(--shadow2);
-      backdrop-filter: blur(10px);
+  to{
+    box-shadow: 0 0 28px rgba(255,106,155,.68), 0 24px 55px rgba(255,106,155,.35);
+    transform: translateY(-1px);
   }
-    .back-btn:active{ transform: translateY(1px) scale(0.99); }
-
-    .envelope-panel{
-      width: 100%;
-      max-width: 560px;
-      flex: 1;                     /* 🔑 ngambil sisa tinggi layar */
-      min-height: 0;               /* 🔑 WAJIB biar child bisa scroll */
-      display: flex;
-      flex-direction: column;
-      border-radius: 28px;
-      background: rgba(255, 214, 229, 0.55);
-      padding: 16px;
-      overflow: hidden;            /* ⛔ cegah kepotong keluar */
-  }
-
-    .envelope-title{
-      text-align:center;
-      color: var(--title);
-      font-weight:900;
-      letter-spacing:.2px;
-      font-size:16px;
-      margin-top:4px;
-    }
-    .envelope-sub{
-      text-align:center;
-      font-weight:800;
-      font-size:13px;
-      color: var(--muted);
-      margin-top:6px;
-      line-height:1.35;
-    }
-
-    .tap-row{
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      gap:10px;
-      margin:14px 0 8px;
-    }
-    .tap-pill{
-      display:inline-flex;
-      align-items:center;
-      gap:8px;
-      padding:8px 12px;
-      border-radius:999px;
-      background: rgba(255,255,255,0.86);
-      border: 1px solid rgba(255,255,255,0.92);
-      box-shadow: var(--shadow2);
-      font-weight:900;
-      color:#6f244a;
-      font-size:12.5px;
-      letter-spacing:.25px;
-    }
-    .tap-progress{
-      width:min(360px, 86vw);
-      height:8px;
-      border-radius:999px;
-      overflow:hidden;
-      background: rgba(255,255,255,0.55);
-      border: 1px solid rgba(255,255,255,0.70);
-      margin: 10px auto 0;
-    }
-    .tap-progress > div{
-      height:100%;
-      width:0%;
-      border-radius:999px;
-      background: linear-gradient(90deg, rgba(255,63,134,.65), rgba(255,184,208,.88), rgba(255,255,255,.85));
-      transition: width 120ms ease;
-    }
-
-    .envelope-wrap{
-      display:flex;
-      justify-content:center;
-      margin-top:16px;
-      user-select:none;
-    }
-  
-    .envelope-wrap{
-  transition: max-height 360ms ease, opacity 260ms ease;
-  max-height: 280px;
 }
 
-/* setelah unlock */
-.envelope-panel.unsealed .envelope-wrap{
-  max-height: 110px;   /* 👈 dipendekin */
-  opacity: 0.9;
+.status{
+  width: 92%;
+  max-width: 360px;
+  min-height: 18px;
+  font-size: 12px;
+  text-align:center;
+  color: rgba(255,255,255,.90);
+  letter-spacing: .5px;
 }
 
-    .envelope-img{
-      width:min(320px, 82vw);
-      aspect-ratio: 4 / 3;
-      border-radius:22px;
-      box-shadow: var(--shadow);
-      border: 1px solid rgba(255,255,255,0.9);
-      background: rgba(255,255,255,0.65);
-      object-fit: cover;
-      cursor:pointer;
-      -webkit-tap-highlight-color: transparent;
-      touch-action: manipulation;
-      transition: transform 120ms ease;
-    }
-    .envelope-img:active{ transform: scale(0.99); }
-    .envelope-shake{ animation: shake 240ms ease; }
-    @keyframes shake{
-      0%{ transform: translateX(0); }
-      25%{ transform: translateX(-3px); }
-      50%{ transform: translateX(3px); }
-      75%{ transform: translateX(-2px); }
-      100%{ transform: translateX(0); }
-    }
+/* =========================================================
+   ERROR MODAL
+========================================================= */
+.modal{
+  position:absolute;
+  inset:0;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background: rgba(0,0,0,.18);
+  backdrop-filter: blur(3px);
+  opacity:0;
+  pointer-events:none;
+  transition: opacity .2s ease;
+  z-index: 50;
+}
+.modal.show{ opacity:1; pointer-events:auto; }
 
-    .letter-card{
+.modal-card{
+  width: 86%;
+  max-width: 360px;
+  background: rgba(255,255,255,.94);
+  border: 2px solid rgba(255,255,255,.55);
+  border-radius: 18px;
+  box-shadow: 0 28px 70px rgba(0,0,0,.24);
+  padding: 18px 14px 14px;
+  color: rgba(178,45,79,.92);
+  position:relative;
+}
+.modal-title{
+  font-weight: 900;
+  letter-spacing: .6px;
+  font-size: 16px;
+  margin-bottom: 6px;
+}
+.modal-text{
+  font-size: 13px;
+  line-height: 1.5;
+  opacity:.95;
+}
+.modal-x{
+  position:absolute;
+  top: 10px;
+  right: 12px;
+  width: 30px;
+  height: 30px;
+  border-radius: 10px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  cursor:pointer;
+  font-weight: 900;
+  color: rgba(178,45,79,.60);
+}
+.modal-x:hover{ background: rgba(255,106,155,.10); }
+
+/* =========================================================
+   TRANSITION PAGE — cinematic
+========================================================= */
+.transition-wrap{
+  width:100%;
+  height:100%;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap: 12px;
+  position:relative;
+}
+
+.flash{
+  position:absolute;
+  inset:-40px;
+  background: radial-gradient(circle at 50% 45%, rgba(255,255,255,.98), rgba(255,255,255,0) 65%);
+  opacity:0;
+  transform: scale(.95);
+}
+.flash.play{ animation: flashIn .75s ease forwards; }
+@keyframes flashIn{
+  0%{ opacity:0; transform:scale(.95); }
+  45%{ opacity:1; transform:scale(1.02); }
+  100%{ opacity:0; transform:scale(1.10); }
+}
+
+.burst{
+  position:relative;
+  width: 260px;
+  height: 260px;
+}
+.burst svg{
+  position:absolute;
+  width: 34px;
+  height: 34px;
+  opacity:0;
+}
+.burst svg.play{ animation: pop .9s ease forwards; }
+@keyframes pop{
+  0%{ opacity:0; transform: scale(.6); }
+  45%{ opacity:1; transform: scale(1.15); }
+  100%{ opacity:0; transform: scale(1.65); }
+}
+
+.loading{
+  font-weight: 900;
+  letter-spacing: 2px;
+  font-size: 12px;
+  text-transform: uppercase;
+  color: rgba(255,255,255,.92);
+}
+
+/* =========================================================
+   MEMORIES PAGE — MAKE IT NOT PLAIN
+========================================================= */
+.mem-wrap{
+  width:100%;
+  height:100%;
+  padding: 24px 16px 28px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:flex-start;
+  position:relative;
+  gap: 12px;
+}
+
+/* title */
+.mem-title{
+  margin-top: 10px;
+  color: rgba(255,255,255,.92);
+  font-weight: 900;
+  font-size: 12px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+/* polaroid stack area */
+.polaroid-stage{
   width: 100%;
-  margin-top: 12px;
-
-  flex: 1;          /* paper memanjang */
-  min-height: 0;    /* PENTING biar child bisa scroll */
-
-  display: flex;    /* bikin layout vertikal */
-  flex-direction: column;
-
-  border-radius: 22px;
-  background: rgba(255,255,255,0.92);
-  padding: 16px;
-  overflow: hidden; /* scroll pindah ke text */
+  max-width: 380px;
+  height: 260px;
+  position:relative;
+  margin-top: 4px;
 }
 
-.letter-card h3{
-  flex: 0 0 auto;   /* judul jangan ikut ngerebut space */
-  margin-bottom: 10px;
+/* polaroid card style */
+.polaroid{
+  position:absolute;
+  left:50%;
+  top: 50%;
+  transform: translate(-50%,-50%);
+  width: 240px;
+  height: 240px;
+  border-radius: 18px;
+  background: rgba(255,255,255,.92);
+  border: 2px solid rgba(255,255,255,.45);
+  box-shadow: 0 22px 45px rgba(0,0,0,.14);
+  padding: 10px 10px 34px;
+  cursor:pointer;
+  transition: transform .25s ease, box-shadow .25s ease, filter .25s ease;
+}
+.polaroid:hover{
+  box-shadow: 0 28px 60px rgba(0,0,0,.18);
+  filter: saturate(1.05);
+}
+.polaroid img{
+  width:100%;
+  height: 170px;
+  object-fit: cover;
+  border-radius: 14px;
+  background: rgba(255,255,255,.25);
+}
+.polaroid .cap{
+  position:absolute;
+  left:0; right:0;
+  bottom: 10px;
+  text-align:center;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  color: rgba(178,45,79,.85);
+  opacity:.95;
 }
 
-.letter-text{
-  flex: 1 1 auto;   /* INI kuncinya: ngisi sisa tinggi */
-  min-height: 0;    /* INI kuncinya juga */
+.polaroid.p1{ transform: translate(-50%,-50%) rotate(-6deg) scale(.98); opacity:.95; }
+.polaroid.p2{ transform: translate(-50%,-50%) rotate(6deg) scale(.96); opacity:.85; }
+.polaroid.p3{ transform: translate(-50%,-50%) rotate(-12deg) scale(.94); opacity:.75; }
 
-  overflow-y: auto;
-  -webkit-overflow-scrolling: touch;
-
-  padding-right: 6px;
-  white-space: pre-wrap;
+/* carousel strip (mini thumbs) */
+.carousel{
+  width: 100%;
+  max-width: 390px;
+  display:flex;
+  gap: 10px;
+  overflow-x:auto;
+  padding: 10px 6px 8px;
+  scroll-snap-type: x mandatory;
+}
+.carousel::-webkit-scrollbar{ height: 6px; }
+.carousel::-webkit-scrollbar-thumb{ background: rgba(255,255,255,.35); border-radius: 99px; }
+.thumb{
+  flex: 0 0 auto;
+  width: 120px;
+  height: 92px;
+  border-radius: 16px;
+  background: rgba(255,255,255,.25);
+  border: 2px solid rgba(255,255,255,.28);
+  box-shadow: 0 16px 30px rgba(0,0,0,.10);
+  overflow:hidden;
+  cursor:pointer;
+  scroll-snap-align: start;
+  position:relative;
+  transition: transform .15s ease;
+}
+.thumb:hover{ transform: translateY(-2px); }
+.thumb img{
+  width:100%;
+  height:100%;
+  object-fit: cover;
+}
+.thumb::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  background: linear-gradient(180deg, rgba(0,0,0,0), rgba(0,0,0,.12));
+  opacity:.55;
 }
 
-@media (prefers-reduced-motion: reduce){
-  .confetti i{
-    animation: none !important;
-    opacity: 1 !important;
-    top: 8% !important;
-    transform: translate3d(var(--x), 0, 0) rotate(var(--r)) !important;
-  }
+/* Sweet letter card */
+.letter{
+  width: 100%;
+  max-width: 390px;
+  background: rgba(255,255,255,.90);
+  border: 2px solid rgba(255,255,255,.55);
+  border-radius: 18px;
+  padding: 14px 14px;
+  box-shadow: var(--shadow-1);
+  color: rgba(178,45,79,.92);
+  line-height: 1.65;
+  font-size: 13px;
 }
-  </style>
+.letter .title{
+  font-weight: 900;
+  letter-spacing: 1.4px;
+  text-transform: uppercase;
+  font-size: 12px;
+  opacity:.9;
+  margin-bottom: 8px;
+}
+.cursor{
+  display:inline-block;
+  width: 8px;
+  height: 14px;
+  transform: translateY(2px);
+  background: rgba(178,45,79,.60);
+  margin-left: 4px;
+  animation: blink 1s infinite;
+}
+@keyframes blink{
+  0%,49%{opacity:1;}
+  50%,100%{opacity:0;}
+}
+
+/* floating hearts */
+.float-hearts{
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  overflow:hidden;
+  opacity:.85;
+}
+.float-heart{
+  position:absolute;
+  width: 16px;
+  height: 16px;
+  opacity:.35;
+  animation: floatUp 7s linear infinite;
+  filter: drop-shadow(0 10px 16px rgba(0,0,0,.12));
+}
+@keyframes floatUp{
+  0%{ transform: translateY(110%) scale(.8); opacity:0; }
+  12%{ opacity:.35; }
+  100%{ transform: translateY(-30%) scale(1.25); opacity:0; }
+}
+
+/* Photo modal (tap polaroid/thumb to open) */
+.photo-modal{
+  position:absolute;
+  inset:0;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background: rgba(0,0,0,.22);
+  backdrop-filter: blur(3px);
+  opacity:0;
+  pointer-events:none;
+  transition: opacity .2s ease;
+  z-index: 80;
+}
+.photo-modal.show{
+  opacity:1;
+  pointer-events:auto;
+}
+.photo-card{
+  width: 88%;
+  max-width: 380px;
+  background: rgba(255,255,255,.95);
+  border-radius: 20px;
+  border: 2px solid rgba(255,255,255,.55);
+  box-shadow: 0 28px 70px rgba(0,0,0,.26);
+  padding: 12px;
+  position:relative;
+}
+.photo-card img{
+  width:100%;
+  height: 360px;
+  object-fit: cover;
+  border-radius: 16px;
+}
+.photo-close{
+  position:absolute;
+  top: 10px;
+  right: 10px;
+  width: 32px;
+  height: 32px;
+  border-radius: 12px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  cursor:pointer;
+  font-weight: 900;
+  color: rgba(178,45,79,.62);
+  background: rgba(255,255,255,.70);
+}
+.photo-close:hover{ background: rgba(255,106,155,.12); }
+
+/* bottom cloud bed for memories too */
+.mem-cloud-bottom{
+  position:absolute;
+  left:-10%;
+  bottom:-90px;
+  width: 120%;
+  height: 280px;
+  opacity: .92;
+  pointer-events:none;
+}
+
+/* small note */
+.small-note{
+  width:100%;
+  text-align:center;
+  font-size: 11px;
+  color: rgba(255,255,255,.78);
+  margin-top: 2px;
+}
+
+/* =========================================================
+   RESPONSIVE tweaks
+========================================================= */
+@media (max-height: 760px){
+  .cloud-heart{ height: 300px; }
+  .txt-val{ font-size: 76px; }
+  .polaroid-stage{ height: 240px; }
+  .photo-card img{ height: 320px; }
+}
+</style>
 </head>
 
 <body>
+<div id="app">
+  <div class="artboard">
 
-  <audio id="bgm" src="bluehair.mp3" loop preload="auto"></audio>
-
-  <!-- ===================== PAGE 1 ===================== -->
-  <div class="page active" id="pageUnlock">
-    <div class="hint">
-      <div class="title">LOVEPRINT <3</div>
-      <div class="sub">Keep holding until it completes. Let go early and it resets.</div>
-    </div>
-
-    <div class="confetti" id="confetti" aria-hidden="true"></div>
-
-    <div class="love-panel" id="lovePanel" aria-hidden="true">
-      <div class="glow-halo"></div>
-      <div class="love-svg">
-        <svg id="loveSvg" viewBox="0 0 300 300" role="img" aria-label="Heart-shaped fingerprint"></svg>
-      </div>
-    </div>
-
-    <div class="card" id="card" aria-live="polite">
-      <div class="badge">
-        <svg viewBox="0 0 24 24" aria-hidden="true">
-          <path d="M12 2.6c2.2 0 4 1.7 4 3.9 0 2.2-1.8 3.9-4 3.9S8 8.7 8 6.5C8 4.3 9.8 2.6 12 2.6Z" fill="none" stroke="rgba(111,36,74,.75)" stroke-width="1.8"/>
-          <path d="M5 21c1.2-5 3.9-8 7-8s5.8 3 7 8" fill="none" stroke="rgba(111,36,74,.75)" stroke-width="1.8" stroke-linecap="round"/>
+    <!-- ===================== LANDING PAGE ===================== -->
+    <section id="landingPage" class="page">
+      <div class="decor-layer" aria-hidden="true">
+        <!-- SIDE CLOUDS -->
+        <svg class="cloud-side left" viewBox="0 0 260 600" preserveAspectRatio="none">
+          <defs>
+            <linearGradient id="sidePink" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#ff8fb4" stop-opacity=".85"/>
+              <stop offset="1" stop-color="#ff6a9b" stop-opacity=".70"/>
+            </linearGradient>
+          </defs>
+          <path fill="url(#sidePink)" d="M90,10
+            C10,70 10,160 70,210
+            C20,250 10,330 80,370
+            C20,420 20,520 110,560
+            L260,600 L260,0 Z"/>
         </svg>
-        ACCESS GRANTED
-      </div>
-      <div class="msg" id="msg"></div>
-      <div class="sub" id="sub"></div>
-    </div>
+        <svg class="cloud-side right" viewBox="0 0 260 600" preserveAspectRatio="none">
+          <path fill="url(#sidePink)" d="M90,10
+            C10,70 10,160 70,210
+            C20,250 10,330 80,370
+            C20,420 20,520 110,560
+            L260,600 L260,0 Z"/>
+        </svg>
 
-    <button class="hold-btn" id="holdBtn" type="button" aria-label="Hold fingerprint button">
-      <div class="btn-pill" id="btnPill">
-        <div class="btn-icon" aria-hidden="true"><div class="emoji">🫆</div></div>
-        <div class="btn-text">
-          <div class="big">Hold to unlock</div>
-          <div class="small">stay a little longer… it’s drawing</div>
+        <!-- STARS (sparkle) -->
+        <div class="star" style="left:16%; top:18%;">
+          <svg viewBox="0 0 32 32">
+            <path fill="rgba(255,230,200,.95)" d="M16 2l2.2 9.2L28 16l-9.8 4.8L16 30l-2.2-9.2L4 16l9.8-4.8L16 2z"/>
+          </svg>
         </div>
-        <div class="progress-pill" aria-hidden="true">
-          <div class="progress-bar" id="progressBar"></div>
+        <div class="star s2" style="left:30%; top:30%;">
+          <svg viewBox="0 0 32 32"><path fill="rgba(255,230,200,.85)" d="M16 2l2.2 9.2L28 16l-9.8 4.8L16 30l-2.2-9.2L4 16l9.8-4.8L16 2z"/></svg>
+        </div>
+        <div class="star s3" style="left:42%; top:20%;">
+          <svg viewBox="0 0 32 32"><path fill="rgba(255,230,200,.75)" d="M16 2l2.2 9.2L28 16l-9.8 4.8L16 30l-2.2-9.2L4 16l9.8-4.8L16 2z"/></svg>
+        </div>
+        <div class="star" style="left:72%; top:24%;">
+          <svg viewBox="0 0 32 32"><path fill="rgba(255,230,200,.95)" d="M16 2l2.2 9.2L28 16l-9.8 4.8L16 30l-2.2-9.2L4 16l9.8-4.8L16 2z"/></svg>
+        </div>
+        <div class="star s2" style="left:84%; top:18%;">
+          <svg viewBox="0 0 32 32"><path fill="rgba(255,230,200,.85)" d="M16 2l2.2 9.2L28 16l-9.8 4.8L16 30l-2.2-9.2L4 16l9.8-4.8L16 2z"/></svg>
+        </div>
+
+        <!-- DOTS -->
+        <div class="dot" style="left:20%; top:46%;"></div>
+        <div class="dot" style="left:36%; top:52%; width:5px; height:5px;"></div>
+        <div class="dot" style="left:68%; top:48%; width:5px; height:5px;"></div>
+        <div class="dot" style="left:82%; top:58%;"></div>
+
+        <!-- OUTLINE HEARTS -->
+        <div class="heart-outline" style="left:-12px; top:56%;"></div>
+        <div class="heart-outline" style="right:-24px; top:50%; transform: scaleX(-1); opacity:.30;"></div>
+        <div class="heart-outline small" style="left:26px; top:76%;"></div>
+        <div class="heart-outline tiny" style="right:34px; top:80%;"></div>
+
+        <!-- BOTTOM CLOUD BED -->
+        <svg class="cloud-bottom" viewBox="0 0 1200 320" preserveAspectRatio="none">
+          <defs>
+            <linearGradient id="cloudBed" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#ffffff" stop-opacity=".95"/>
+              <stop offset="1" stop-color="#ffffff" stop-opacity="1"/>
+            </linearGradient>
+          </defs>
+          <path fill="url(#cloudBed)" d="M0,130
+            C120,40 240,70 310,110
+            C380,30 520,60 570,120
+            C650,30 780,60 830,122
+            C910,50 1040,58 1120,118
+            C1160,90 1186,100 1200,110
+            L1200,320 L0,320 Z"/>
+        </svg>
+      </div>
+
+      <div class="landing-wrap">
+        <!-- cupid doodle -->
+        <svg class="cupid" viewBox="0 0 64 64" aria-hidden="true">
+          <path d="M28 18c0-4 3-7 7-7s7 3 7 7" fill="none" stroke="rgba(178,45,79,.85)" stroke-width="3" stroke-linecap="round"/>
+          <path d="M32 26c-10 0-15 9-15 15 0 12 15 18 15 18s15-6 15-18c0-6-5-15-15-15z"
+                fill="none" stroke="rgba(178,45,79,.85)" stroke-width="3" />
+          <path d="M10 30l18 11" stroke="rgba(178,45,79,.85)" stroke-width="3" stroke-linecap="round"/>
+          <path d="M14 25l-4 5 7 2" fill="none" stroke="rgba(178,45,79,.85)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M44 18c7 0 10 7 10 7s-3 7-10 7" fill="none" stroke="rgba(178,45,79,.55)" stroke-width="3" stroke-linecap="round"/>
+          <path d="M38 14c-2-6-10-7-12 0" fill="none" stroke="rgba(178,45,79,.45)" stroke-width="3" stroke-linecap="round"/>
+        </svg>
+
+        <!-- fluffy cloud heart -->
+        <div class="cloud-heart" aria-hidden="false">
+          <!-- Puffy cloud heart (lebih fluffy + highlight) -->
+          <svg viewBox="0 0 520 420">
+            <defs>
+              <radialGradient id="puffGrad" cx="50%" cy="38%" r="75%">
+                <stop offset="0" stop-color="#ffffff" stop-opacity="1"/>
+                <stop offset="1" stop-color="#ffffff" stop-opacity=".90"/>
+              </radialGradient>
+              <radialGradient id="puffGlow" cx="45%" cy="28%" r="50%">
+                <stop offset="0" stop-color="#ffffff" stop-opacity=".90"/>
+                <stop offset="1" stop-color="#ffffff" stop-opacity="0"/>
+              </radialGradient>
+            </defs>
+
+            <!-- base heart -->
+            <path fill="url(#puffGrad)" d="
+              M260 382
+              C210 360 76 300 76 205
+              C76 145 120 110 176 110
+              C206 110 234 124 252 150
+              C270 124 298 110 328 110
+              C384 110 428 145 428 205
+              C428 300 310 360 260 382 Z"/>
+
+            <!-- extra puffs around edges -->
+            <circle cx="150" cy="196" r="48" fill="rgba(255,255,255,.92)"/>
+            <circle cx="206" cy="150" r="58" fill="rgba(255,255,255,.93)"/>
+            <circle cx="260" cy="168" r="62" fill="rgba(255,255,255,.95)"/>
+            <circle cx="314" cy="150" r="58" fill="rgba(255,255,255,.93)"/>
+            <circle cx="370" cy="196" r="48" fill="rgba(255,255,255,.92)"/>
+            <circle cx="260" cy="252" r="86" fill="rgba(255,255,255,.92)"/>
+
+            <!-- highlight glow -->
+            <ellipse cx="235" cy="150" rx="140" ry="90" fill="url(#puffGlow)" opacity=".9"/>
+          </svg>
+
+          <div class="txt-happy">HAPPY</div>
+          <div class="txt-val">Valentine’s</div>
+          <div class="txt-day">DAY</div>
+
+          <svg class="val-heart" viewBox="0 0 32 32" aria-hidden="true">
+            <path d="M16 28s-10-6.2-10-14C6 10 8.5 7.5 12 7.5c2 0 3.4 1 4 2
+                     .6-1 2-2 4-2 3.5 0 6 2.5 6 6.5 0 7.8-10 14-10 14z"
+                  fill="rgba(178,45,79,.65)"/>
+          </svg>
+        </div>
+
+        <button class="start-btn" id="startBtn">START</button>
+        <div class="landing-caption">PRESS START TO BEGIN THE ADVENTURE</div>
+        <div class="landing-subcaption">Save your spot and get ready for a little Valentine magic.</div>
+      </div>
+    </section>
+
+    <!-- ===================== QUESTION PAGE ===================== -->
+    <section id="questionPage" class="page hidden">
+      <div class="decor-layer" aria-hidden="true">
+        <!-- reuse side clouds + bottom bed for theme consistency -->
+        <svg class="cloud-side left" viewBox="0 0 260 600" preserveAspectRatio="none">
+          <defs>
+            <linearGradient id="sidePink2" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#ff8fb4" stop-opacity=".78"/>
+              <stop offset="1" stop-color="#ff6a9b" stop-opacity=".60"/>
+            </linearGradient>
+          </defs>
+          <path fill="url(#sidePink2)" d="M90,10
+            C10,70 10,160 70,210
+            C20,250 10,330 80,370
+            C20,420 20,520 110,560
+            L260,600 L260,0 Z"/>
+        </svg>
+        <svg class="cloud-side right" viewBox="0 0 260 600" preserveAspectRatio="none">
+          <path fill="url(#sidePink2)" d="M90,10
+            C10,70 10,160 70,210
+            C20,250 10,330 80,370
+            C20,420 20,520 110,560
+            L260,600 L260,0 Z"/>
+        </svg>
+
+        <div class="star s2" style="left:20%; top:18%;">
+          <svg viewBox="0 0 32 32"><path fill="rgba(255,230,200,.85)" d="M16 2l2.2 9.2L28 16l-9.8 4.8L16 30l-2.2-9.2L4 16l9.8-4.8L16 2z"/></svg>
+        </div>
+        <div class="star s3" style="left:80%; top:22%;">
+          <svg viewBox="0 0 32 32"><path fill="rgba(255,230,200,.75)" d="M16 2l2.2 9.2L28 16l-9.8 4.8L16 30l-2.2-9.2L4 16l9.8-4.8L16 2z"/></svg>
+        </div>
+
+        <svg class="cloud-bottom" viewBox="0 0 1200 320" preserveAspectRatio="none" style="opacity:.82;">
+          <defs>
+            <linearGradient id="cloudBed2" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#ffffff" stop-opacity=".90"/>
+              <stop offset="1" stop-color="#ffffff" stop-opacity="1"/>
+            </linearGradient>
+          </defs>
+          <path fill="url(#cloudBed2)" d="M0,140
+            C140,60 240,78 320,118
+            C410,44 520,64 590,130
+            C680,52 800,72 870,134
+            C940,74 1060,80 1140,130
+            L1200,320 L0,320 Z"/>
+        </svg>
+      </div>
+
+      <div class="question-wrap">
+        <!-- chibi PNG (user requested) -->
+        <img id="chibiImg" class="chibi" src="assets/chibi-happy.png" alt="chibi">
+
+        <div class="bubble">
+          <h2>Will you be my Valentine?</h2>
+          <p>Please be gentle… I’m emotionally soft.</p>
+        </div>
+
+        <div class="controls" id="controls">
+          <button class="btn btn-yes" id="yesBtn">YES</button>
+          <button class="btn btn-no" id="noBtn">NO</button>
+        </div>
+
+        <div class="status" id="statusLine"></div>
+
+        <div class="modal" id="errorModal" aria-hidden="true">
+          <div class="modal-card">
+            <div class="modal-x" id="errorClose">X</div>
+            <div class="modal-title">Error 014: Too Much Cute</div>
+            <div class="modal-text">
+              The system detected an invalid choice.<br>
+              Please close this window and proceed with the recommended option: <b>YES</b>.
+            </div>
+          </div>
         </div>
       </div>
-    </button>
+    </section>
+
+    <!-- ===================== TRANSITION PAGE ===================== -->
+    <section id="transitionPage" class="page hidden">
+      <div class="transition-wrap">
+        <div class="flash" id="flash"></div>
+
+        <div class="burst" aria-hidden="true">
+          <svg id="b1" viewBox="0 0 32 32" style="left:48%; top:42%;">
+            <path d="M16 28s-10-6.2-10-14C6 10 8.5 7.5 12 7.5c2 0 3.4 1 4 2
+                     .6-1 2-2 4-2 3.5 0 6 2.5 6 6.5 0 7.8-10 14-10 14z"
+                  fill="rgba(255,255,255,.95)"/>
+          </svg>
+          <svg id="b2" viewBox="0 0 32 32" style="left:34%; top:58%;">
+            <path d="M16 28s-10-6.2-10-14C6 10 8.5 7.5 12 7.5c2 0 3.4 1 4 2
+                     .6-1 2-2 4-2 3.5 0 6 2.5 6 6.5 0 7.8-10 14-10 14z"
+                  fill="rgba(255,255,255,.90)"/>
+          </svg>
+          <svg id="b3" viewBox="0 0 32 32" style="left:64%; top:54%;">
+            <path d="M16 28s-10-6.2-10-14C6 10 8.5 7.5 12 7.5c2 0 3.4 1 4 2
+                     .6-1 2-2 4-2 3.5 0 6 2.5 6 6.5 0 7.8-10 14-10 14z"
+                  fill="rgba(255,255,255,.86)"/>
+          </svg>
+        </div>
+
+        <div class="loading">Loading sweetest memories...</div>
+      </div>
+    </section>
+
+    <!-- ===================== MEMORIES PAGE ===================== -->
+    <section id="memoriesPage" class="page hidden">
+      <div class="decor-layer" aria-hidden="true">
+        <div class="float-hearts" id="floatHearts"></div>
+
+        <svg class="mem-cloud-bottom" viewBox="0 0 1200 340" preserveAspectRatio="none">
+          <defs>
+            <linearGradient id="memBed" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#ffffff" stop-opacity=".92"/>
+              <stop offset="1" stop-color="#ffffff" stop-opacity="1"/>
+            </linearGradient>
+          </defs>
+          <path fill="url(#memBed)" d="M0,120
+            C120,30 240,60 320,108
+            C420,20 540,44 610,120
+            C700,22 820,46 900,126
+            C980,70 1080,70 1200,118
+            L1200,340 L0,340 Z"/>
+        </svg>
+      </div>
+
+      <div class="mem-wrap">
+        <div class="mem-title">Memorable Moments</div>
+
+        <!-- Polaroid stack -->
+        <div class="polaroid-stage" id="polaroidStage">
+          <div class="polaroid p3" data-photo="assets/memory3.jpg" data-cap="A tiny moment, a huge feeling.">
+            <img src="assets/memory3.jpg" alt="memory 3">
+            <div class="cap">A tiny moment, a huge feeling.</div>
+          </div>
+          <div class="polaroid p2" data-photo="assets/memory2.jpg" data-cap="You + me = my favorite story.">
+            <img src="assets/memory2.jpg" alt="memory 2">
+            <div class="cap">You + me = my favorite story.</div>
+          </div>
+          <div class="polaroid p1" data-photo="assets/memory1.jpg" data-cap="The day my heart smiled.">
+            <img src="assets/memory1.jpg" alt="memory 1">
+            <div class="cap">The day my heart smiled.</div>
+          </div>
+        </div>
+
+        <!-- Carousel thumbs -->
+        <div class="carousel" id="carousel">
+          <div class="thumb" data-photo="assets/memory1.jpg"><img src="assets/memory1.jpg" alt="thumb 1"></div>
+          <div class="thumb" data-photo="assets/memory2.jpg"><img src="assets/memory2.jpg" alt="thumb 2"></div>
+          <div class="thumb" data-photo="assets/memory3.jpg"><img src="assets/memory3.jpg" alt="thumb 3"></div>
+          <div class="thumb" data-photo="assets/memory4.jpg"><img src="assets/memory4.jpg" alt="thumb 4"></div>
+        </div>
+
+        <!-- Letter -->
+        <div class="letter">
+          <div class="title">A sweet letter for you</div>
+          <span id="letterText"></span><span class="cursor"></span>
+        </div>
+
+        <div class="small-note">Tap a photo to view it bigger.</div>
+
+        <!-- Photo modal -->
+        <div class="photo-modal" id="photoModal" aria-hidden="true">
+          <div class="photo-card">
+            <div class="photo-close" id="photoClose">X</div>
+            <img id="photoView" src="assets/memory1.jpg" alt="big photo">
+          </div>
+        </div>
+
+      </div>
+    </section>
+
   </div>
-
-  <!-- Floating button OUTSIDE pageUnlock so it never gets clipped -->
-  <button class="letter-float-btn" id="goLetterBtn" type="button" aria-label="Go to letter page">
-    Open the letter →
-  </button>
-
-  <!-- ===================== PAGE 2 ===================== -->
-  <div class="page" id="pageLetter">
-    <div class="confetti" id="confetti2" aria-hidden="true"></div>
-    <div class="letter-stage">
-      <button class="back-btn" id="backBtn" type="button" aria-label="Back">Back</button>
-
-      <div class="envelope-panel">
-        <div class="envelope-title">Tap 20 times to unlock the secret</div>
-        <div class="envelope-sub">Each tap is a tiny knock. Keep going until it opens.</div>
-
-        <div class="tap-row">
-          <div class="tap-pill" id="tapCountPill">Taps: 0 / 20</div>
-          <div class="tap-pill" id="tapHintPill">Unlocked: No</div>
-        </div>
-
-        <div class="tap-progress" aria-hidden="true"><div id="tapBar"></div></div>
-
-        <div class="envelope-wrap">
-          <img id="envelopeImg" class="envelope-img" alt="Envelope (JPG)" />
-        </div>
-
-        <div class="letter-card" id="letterCard">
-          <h3>To Rsy</h3>
-          <div class="letter-text" id="letterText"></div>
-        </div>
-      </div>
-    </div>
-  </div>
+</div>
 
 <script>
-(() => {
-  // ===================== AUDIO =====================
-  const bgm = document.getElementById('bgm');
-  function startBgm(){
-    if(!bgm) return;
-    bgm.volume = 0.18;
-    bgm.play().catch(()=>{});
-  }
+/* =========================================================
+   UTIL
+========================================================= */
+const $ = (s) => document.querySelector(s);
 
-  // ===================== PAGE SWITCH =====================
-  const pageUnlock = document.getElementById('pageUnlock');
-  const pageLetter = document.getElementById('pageLetter');
-  const goLetterBtn = document.getElementById('goLetterBtn');
-  const backBtn = document.getElementById('backBtn');
-
-const confetti2 = document.getElementById('confetti2');
-let confetti2Timer = null;
-
-function startConfettiPage2(){
-  if(confetti2Timer) return;
-  // bersihin dulu biar rapi
-  clearConfetti(confetti2);
-
-  // spawn rutin: sedikit tapi sering biar halus & ringan
-  confetti2Timer = setInterval(() => {
-    spawnConfettiInto(confetti2, 6, 9000, 15000); // lambat banget
-  }, 600);
+function showPage(id){
+  const ids = ["landingPage","questionPage","transitionPage","memoriesPage"];
+  ids.forEach(x => $("#"+x).classList.add("hidden"));
+  $("#"+id).classList.remove("hidden");
 }
 
-function stopConfettiPage2(){
-  if(confetti2Timer){
-    clearInterval(confetti2Timer);
-    confetti2Timer = null;
-  }
-  clearConfetti(confetti2);
-}
-
-  function showPage(which){
-  if(which === 'unlock'){
-    pageUnlock.classList.add('active');
-    pageLetter.classList.remove('active');
-
-    document.body.classList.remove('on-letter');   // ✅ penting
-   stopConfettiPage2();
-  } else {
-    pageUnlock.classList.remove('active');
-    pageLetter.classList.add('active');
-
-    document.body.classList.add('on-letter');      // ✅ penting
-    goLetterBtn.classList.remove('show');          // ✅ paksa hilang
-
-    // kalau ada scroll di letter-card, balikin ke atas:
-    const lc = document.getElementById('letterCard');
-    if(lc) lc.scrollTop = 0;
-  }
-}
-
-  goLetterBtn.addEventListener('click', () => {
-    showPage('letter');
-    startBgm();
-  });
-  backBtn.addEventListener('click', () => {
-    showPage('unlock');
-    // musik tetap jalan (kalau mau berhenti: bgm.pause(); bgm.currentTime=0;)
-  });
-
-  // ===================== LOVEPRINT (PAGE 1) =====================
-  const lovePanel = document.getElementById('lovePanel');
-  const loveSvg  = document.getElementById('loveSvg');
-  const holdBtn  = document.getElementById('holdBtn');
-  const btnPill  = document.getElementById('btnPill');
-  const progressBar = document.getElementById('progressBar');
-  const confettiEl = document.getElementById('confetti');
-  const card = document.getElementById('card');
-  const msgEl = document.getElementById('msg');
-  const subEl = document.getElementById('sub');
-
-  const HOLD_THRESHOLD_MS = 280;
-  const DRAW_DURATION_MS  = 9800;
-  const RIDGE_COUNT = 52;
-  const SPIRAL_COUNT = 26;
-  const ARC_COUNT = 18;
-  const BREAK_DASH = true;
-
-  const PULSE_TOTAL_MS = 2300;
-  const UNLOCK_DELAY_MS = 260;
-  const TYPE_SPEED_MS = 60;
-
-  const CONFETTI_COLORS = [
-    "rgba(255,63,134,.42)",
-    "rgba(255,184,208,.65)",
-    "rgba(255,255,255,.75)",
-    "rgba(255,214,229,.60)",
-    "rgba(255,236,244,.70)"
-  ];
-
-  const COPY_MAIN = "Unlocked by your touch… now my heart knows it’s really you.";
-  const COPY_SUB  = "Want the secret? Tap “Open the letter”.";
-
-  function heartPoints(samples = 320) {
-    const pts = [];
-    for (let i = 0; i <= samples; i++) {
-      const t = (i / samples) * Math.PI * 2;
-      const x = 16 * Math.pow(Math.sin(t), 3);
-      const y = 13 * Math.cos(t) - 5 * Math.cos(2*t) - 2 * Math.cos(3*t) - Math.cos(4*t);
-      pts.push({ x, y });
-    }
-    return pts;
-  }
-  function pointsToPath(pts, cx, cy, scale) {
-    let d = '';
-    const map = p => ({ X: cx + p.x * scale, Y: cy - p.y * scale });
-    const first = map(pts[0]);
-    d += `M ${first.X.toFixed(2)} ${first.Y.toFixed(2)} `;
-    for (let i = 1; i < pts.length; i++) {
-      const p = map(pts[i]);
-      d += `L ${p.X.toFixed(2)} ${p.Y.toFixed(2)} `;
-    }
-    d += 'Z';
-    return d;
-  }
-  function makeHeartPath(scale, cx=150, cy=155) {
-    return pointsToPath(heartPoints(340), cx, cy, scale);
-  }
-  function makeSpiralPath(cx, cy, turns, startR, endR, wobble=0.68, pts=720) {
-    let d = '';
-    for (let i = 0; i <= pts; i++) {
-      const u = i / pts;
-      const ang = u * turns * Math.PI * 2;
-      const r = startR + (endR - startR) * (u*u*0.85 + u*0.15);
-      const wob = (Math.sin(ang * 1.7) + Math.sin(ang * 0.9) + Math.sin(ang * 0.23)) * 0.33 * wobble;
-      const rr = Math.max(0, r + wob);
-      const x = cx + Math.cos(ang) * rr;
-      const y = cy + Math.sin(ang) * rr;
-      d += (i === 0) ? `M ${x.toFixed(2)} ${y.toFixed(2)} ` : `L ${x.toFixed(2)} ${y.toFixed(2)} `;
-    }
-    return d;
-  }
-  function makeArcPath(cx, cy, r, startAng, endAng, wobble=0.5, pts=160) {
-    let d = '';
-    for (let i = 0; i <= pts; i++) {
-      const u = i/pts;
-      const ang = startAng + (endAng - startAng) * u;
-      const wob = (Math.sin(ang*2.4) + Math.sin(ang*0.8)) * 0.25 * wobble;
-      const rr = r + wob;
-      const x = cx + Math.cos(ang) * rr;
-      const y = cy + Math.sin(ang) * rr;
-      d += (i===0) ? `M ${x.toFixed(2)} ${y.toFixed(2)} ` : `L ${x.toFixed(2)} ${y.toFixed(2)} `;
-    }
-    return d;
-  }
-
-  let ridgePaths = [];
-  function buildLoveprint() {
-    loveSvg.innerHTML = '';
-    ridgePaths = [];
-    const ns = 'http://www.w3.org/2000/svg';
-    const defs = document.createElementNS(ns, 'defs');
-
-    const clip = document.createElementNS(ns, 'clipPath');
-    clip.setAttribute('id', 'heartClip');
-    const clipHeart = document.createElementNS(ns, 'path');
-    clipHeart.setAttribute('d', makeHeartPath(5.75));
-    clip.appendChild(clipHeart);
-    defs.appendChild(clip);
-
-    const filter = document.createElementNS(ns, 'filter');
-    filter.setAttribute('id', 'grain');
-    filter.setAttribute('x', '-20%'); filter.setAttribute('y', '-20%');
-    filter.setAttribute('width', '140%'); filter.setAttribute('height', '140%');
-
-    const feTurb = document.createElementNS(ns, 'feTurbulence');
-    feTurb.setAttribute('type', 'fractalNoise');
-    feTurb.setAttribute('baseFrequency', '0.85');
-    feTurb.setAttribute('numOctaves', '2');
-    feTurb.setAttribute('stitchTiles', 'stitch');
-
-    const feColor = document.createElementNS(ns, 'feColorMatrix');
-    feColor.setAttribute('type', 'matrix');
-    feColor.setAttribute('values', `
-      1 0 0 0 0
-      0 1 0 0 0
-      0 0 1 0 0
-      0 0 0 .14 0
-    `.trim().replace(/\s+/g,' '));
-
-    filter.appendChild(feTurb);
-    filter.appendChild(feColor);
-    defs.appendChild(filter);
-    loveSvg.appendChild(defs);
-
-    const g = document.createElementNS(ns, 'g');
-    g.setAttribute('clip-path', 'url(#heartClip)');
-
-    const baseScale = 5.62;
-    for (let i = 0; i < RIDGE_COUNT; i++) {
-      const p = document.createElementNS(ns, 'path');
-      const s = baseScale - i * 0.11;
-      p.setAttribute('d', makeHeartPath(Math.max(2.0, s)));
-      p.setAttribute('class', (i % 4 === 0) ? 'ridge soft' : 'ridge');
-      if (BREAK_DASH) {
-        const dashA = 9 + (i % 7) * 2;
-        const dashB = 5 + (i % 6) * 2;
-        p.setAttribute('stroke-dasharray', `${dashA} ${dashB}`);
-      }
-      if (i % 9 === 0) p.setAttribute('stroke-width', '1.45');
-      if (i % 11 === 0) p.setAttribute('opacity', '0.86');
-
-      g.appendChild(p);
-      ridgePaths.push(p);
-    }
-
-    for (let i = 0; i < SPIRAL_COUNT; i++) {
-      const p = document.createElementNS(ns, 'path');
-      const left = (i % 2 === 0);
-      const cx = left ? 116 : 184;
-      const cy = 155;
-
-      const turns = 3.9 + i * 0.14;
-      const startR = 1.0 + i * 0.45;
-      const endR   = 64  + i * 0.92;
-
-      p.setAttribute('d', makeSpiralPath(cx, cy, turns, startR, endR, 0.70, 760));
-      p.setAttribute('class', (i % 3 === 1) ? 'ridge soft' : 'ridge');
-      p.setAttribute('stroke-width', (i % 4 === 0) ? '1.35' : '1.55');
-      if (BREAK_DASH) p.setAttribute('stroke-dasharray', `${11 + (i%5)*3} ${7 + (i%4)*3}`);
-
-      g.appendChild(p);
-      ridgePaths.push(p);
-    }
-
-    for (let i = 0; i < ARC_COUNT; i++) {
-      const p = document.createElementNS(ns, 'path');
-      const t = i / ARC_COUNT;
-      const cx = 150 + (Math.sin(t * Math.PI * 2) * 8);
-      const cy = 160 + (Math.cos(t * Math.PI * 2) * 6);
-      const r  = 40 + i * 2.8;
-
-      const startAng = (0.6 + t * 0.8) * Math.PI;
-      const endAng   = startAng + (0.9 + (i%3)*0.18);
-
-      p.setAttribute('d', makeArcPath(cx, cy, r, startAng, endAng, 0.65, 200));
-      p.setAttribute('class', (i % 2 === 0) ? 'ridge soft' : 'ridge');
-      p.setAttribute('stroke-width', (i % 3 === 0) ? '1.35' : '1.55');
-      if (BREAK_DASH) p.setAttribute('stroke-dasharray', `${10 + (i%4)*3} ${7 + (i%3)*3}`);
-
-      g.appendChild(p);
-      ridgePaths.push(p);
-    }
-
-    const outer = document.createElementNS(ns, 'path');
-    outer.setAttribute('d', makeHeartPath(5.75));
-    outer.setAttribute('class', 'ridge');
-    outer.setAttribute('stroke-width', '2.6');
-    outer.setAttribute('stroke-dasharray', '0');
-
-    loveSvg.appendChild(g);
-    loveSvg.appendChild(outer);
-    ridgePaths.push(outer);
-
-    const grainRect = document.createElementNS(ns, 'rect');
-    grainRect.setAttribute('x','0'); grainRect.setAttribute('y','0');
-    grainRect.setAttribute('width','300'); grainRect.setAttribute('height','300');
-    grainRect.setAttribute('filter','url(#grain)');
-    grainRect.setAttribute('opacity','0.28');
-    grainRect.setAttribute('clip-path','url(#heartClip)');
-    loveSvg.appendChild(grainRect);
-
-    ridgePaths.forEach((path) => {
-      const len = path.getTotalLength();
-      path.style.strokeDasharray = `${len}`;
-      path.style.strokeDashoffset = `${len}`;
-      path.style.transition = 'none';
-    });
-  }
-  buildLoveprint();
-  // ✅ DEBUG: test confetti muncul atau nggak
-
-  function clearConfetti(el){
-  if(!el) return;
-  el.innerHTML = '';
-}
-
-function spawnConfettiInto(container, count = 14, durMin = 8000, durMax = 14000) {
-  if(!container) return;
-
-  for (let i = 0; i < count; i++) {
-    const el = document.createElement('i');
-    const types = ['dot','line','miniheart'];
-    el.classList.add(types[Math.floor(Math.random() * types.length)]);
-
-    const left  = Math.random() * 100;
-    const drift = (Math.random() * 140 - 70).toFixed(0) + 'px';
-    const delay = (Math.random() * 700).toFixed(0) + 'ms';
-    const dur   = (durMin + Math.random() * (durMax - durMin)).toFixed(0) + 'ms';
-    const rot   = (Math.random() * 180 - 90).toFixed(0) + 'deg';
-
-    const color = CONFETTI_COLORS[Math.floor(Math.random() * CONFETTI_COLORS.length)];
-    el.style.left = left + '%';
-    el.style.background = color;
-
-    el.style.setProperty('--x', (Math.random() * 20 - 10).toFixed(0) + 'px');
-    el.style.setProperty('--drift', drift);
-    el.style.setProperty('--delay', delay);
-    el.style.setProperty('--dur', dur);
-    el.style.setProperty('--r', rot);
-
-    el.addEventListener('animationend', () => el.remove(), { once:true });
-    container.appendChild(el);
-  }
-}
-
-  function typewriter(text, targetEl, speedMs, onDone) {
-  targetEl.textContent = '';
-  const caret = document.createElement('span');
-  caret.className = 'caret';
-  targetEl.appendChild(caret);
-
-  let i = 0;
-  const timer = setInterval(() => {
-    caret.insertAdjacentText('beforebegin', text[i] ?? '');
-    i++;
-    if (i >= text.length) {           // ✅ FIX: pakai text.length
-      clearInterval(timer);
-      caret.remove();
-      onDone && onDone();
-    }
-  }, speedMs);
-}
-
-  let holding = false;
-  let holdStart = 0;
-  let rafId = null;
-  let committed = false;
-  let lastProgress = 0;
-  let unlocked = false;
-
-  function setProgress(progress01) {
-    const p = Math.min(1, Math.max(0, progress01));
-    ridgePaths.forEach((path, idx) => {
-      const len = path.getTotalLength();
-      const delay = (idx / ridgePaths.length) * 0.22;
-      const local = (p - delay) / (1 - 0.22);
-      const lp = Math.min(1, Math.max(0, local));
-      path.style.strokeDashoffset = `${len * (1 - lp)}`;
-    });
-    progressBar.style.width = `${p * 100}%`;
-    lastProgress = p;
-  }
-
-  function resetDrawingOnly() {
-    cancelAnimationFrame(rafId);
-    rafId = null;
-    holding = false;
-    committed = false;
-    lastProgress = 0;
-    unlocked = false;
-
-    btnPill.classList.remove('holding');
-    lovePanel.classList.remove('pulsing','unlocking','idle');
-    card.classList.remove('show');
-    goLetterBtn.classList.remove('show');
-    msgEl.textContent = '';
-    subEl.textContent = '';
-    clearConfetti(confettiEl);
-
-    ridgePaths.forEach((p) => {
-      const len = p.getTotalLength();
-      p.style.strokeDashoffset = `${len}`;
-    });
-    progressBar.style.width = `0%`;
-  }
-
-  function runUnlockSequence() {
-  if (unlocked) return;
-  unlocked = true;
-
-  lovePanel.classList.add('pulsing');
-  spawnConfettiInto(confettiEl, 28, 1600, 2800);
-
-  setTimeout(() => {
-    lovePanel.classList.remove('pulsing');
-    lovePanel.classList.add('unlocking');
-
-    // ✅ setelah animasi unlocking selesai, bikin detak pelan terus
-    setTimeout(() => {
-      lovePanel.classList.add('idle');
-    }, 740); // 720ms transisi + sedikit buffer
-
-    setTimeout(() => {
-      card.classList.add('show');
-      goLetterBtn.classList.add('show');
-      typewriter(COPY_MAIN, msgEl, TYPE_SPEED_MS, () => {
-        subEl.textContent = COPY_SUB;
-      });
-    }, 520);
-
-  }, PULSE_TOTAL_MS + UNLOCK_DELAY_MS);
-}
-
-  function tick(now) {
-    if (!holding) return;
-    const elapsed = now - holdStart;
-
-    if (elapsed >= HOLD_THRESHOLD_MS) {
-      if (!committed) committed = true;
-
-      const drawElapsed = elapsed - HOLD_THRESHOLD_MS;
-      const progress = drawElapsed / DRAW_DURATION_MS;
-      setProgress(progress);
-
-      if (progress >= 1) {
-        holding = false;
-        btnPill.classList.remove('holding');
-        progressBar.style.width = `100%`;
-        cancelAnimationFrame(rafId);
-        rafId = null;
-        runUnlockSequence();
-        return;
-      }
-    } else {
-      const pre = elapsed / HOLD_THRESHOLD_MS;
-      progressBar.style.width = `${pre * 8}%`;
-    }
-    rafId = requestAnimationFrame(tick);
-  }
-
-  function startHold(e) {
-  e.preventDefault();
-  if (rafId) cancelAnimationFrame(rafId);
-
-  if (unlocked) return; // ✅ setelah unlock, ignore hold
-
-  if (lastProgress >= 1) {
-    resetDrawingOnly();
-  } else {
-    ridgePaths.forEach((p) => {
-      const len = p.getTotalLength();
-      p.style.strokeDashoffset = `${len}`;
-    });
-    progressBar.style.width = `0%`;
-    lovePanel.classList.remove('pulsing','unlocking','idle');
-    card.classList.remove('show');
-    goLetterBtn.classList.remove('show');
-    msgEl.textContent = '';
-    subEl.textContent = '';
-    clearConfetti();
-  }
-
-  holding = true;
-  committed = false;
-  holdStart = performance.now();
-  btnPill.classList.add('holding');
-  rafId = requestAnimationFrame(tick);
-}
-
-  function endHold(e) {
-  e.preventDefault();
-  if (unlocked) return;                 // ✅ kalau udah unlock, jangan reset
-  if (holding && lastProgress < 1) resetDrawingOnly();
-}
-
-  holdBtn.addEventListener('pointerdown', startHold, { passive:false });
-  window.addEventListener('pointerup', endHold, { passive:false });
-  window.addEventListener('pointercancel', endHold, { passive:false });
-  window.addEventListener('touchmove', (e) => { if (holding) e.preventDefault(); }, { passive:false });
-  window.addEventListener('blur', () => {
-  if (unlocked) return;                 // ✅ kalau udah unlock, jangan reset
-  if (lastProgress < 1) resetDrawingOnly();
+/* =========================================================
+   LANDING: START
+========================================================= */
+$("#startBtn").addEventListener("click", () => {
+  showPage("questionPage");
 });
 
-  // ===================== ENVELOPE PAGE (PAGE 2) =====================
-  const envelopeImg = document.getElementById('envelopeImg');
-  const tapCountPill = document.getElementById('tapCountPill');
-  const tapHintPill = document.getElementById('tapHintPill');
-  const tapBar = document.getElementById('tapBar');
-  const letterCard = document.getElementById('letterCard');
-  const letterText = document.getElementById('letterText');
+/* =========================================================
+   QUESTION: CHIBI + NO/YES LOGIC
+========================================================= */
+let noClicks = 0;
+let noLocked = false;
 
-  const TAPS_REQUIRED = 20;
-  let taps = 0;
-  let letterUnlocked = false;
-  let typing = false;
+const chibi = $("#chibiImg");
+const statusLine = $("#statusLine");
+const noBtn = $("#noBtn");
+const yesBtn = $("#yesBtn");
 
-  const LETTER_P1 =
-`A special day for a special human, happy birthday syayang🤤
-Di hari ini, gue cuma pengen u tahu satu hal penting ”you matter, more than you realize.”
+const errorModal = $("#errorModal");
+const errorClose = $("#errorClose");
 
-Semoga di umur kali ini hidup u semakin lebih banyak ketawanya, biar selalu mikir kalau "oh ternyata hidup gue ga seburuk itu" AWOKAWOK pokonya biar hari hari u kedepannya bs lebih asoy dijalanin dah. trs ni ya kalo ada masalah apapun itu, U HRS TETEP JALAN MAJU PELAN PELAN! jgn sampe yg harusnya jalan di aspal lu malah milihnya jalan di jembatan shiratal mustaqim kan ga lucu 
+const CHIBI = {
+  happy: "assets/chibi-happy.png",
+  confused: "assets/chibi-confused.png",
+  annoyed: "assets/chibi-annoyed.png",
+  angry: "assets/chibi-angry.png",
+  sulk: "assets/chibi-sulk.png",
+  blush: "assets/chibi-blush.png"
+};
 
-Oia just wanna say this: ‌i‌’‌m‌ ‌p‌r‌o‌u‌d‌ ‌o‌f‌ ‌u‌,‌ ‌f‌o‌r‌ ‌e‌v‌e‌r‌y‌t‌h‌i‌n‌g‌ ‌u‌ ‌a‌r‌e‌ ‌n‌ ‌e‌v‌e‌r‌y‌t‌h‌i‌n‌g‌ ‌u‌’‌r‌e‌ ‌b‌e‌c‌o‌m‌i‌n‌g‌.‌ sometimes tuh ya u forget how strong u actually are, tapi gw see it, NGAKAK (tp serius).
-Semoga di tahun dan di umur eloH yg sekarang ini eloH bisa lebih sayang sama yourself, lebih percaya sama proses hidup yourself, dan ga gampang ngeremehin diri sendiri, u deserve good things, good people, n good days izin ye izinn
-
-Kalo kata haji naim tuh, nikmatin aja perjalanan u ga usah buru-buru, hidup isn’t a race anyway.
-And no matter what
-I’m rooting for u. Always`;
-
-const LETTER_P2 =
-`— Salam sehat dari regu lavender, Je t'aime lup🪻`;
-
-function buildEnvelopeJPG() {
-    const c = document.createElement('canvas');
-    c.width = 900;
-    c.height = 675;
-    const ctx = c.getContext('2d');
-
-    const g = ctx.createLinearGradient(0, 0, c.width, c.height);
-    g.addColorStop(0, '#fff6fa');
-    g.addColorStop(1, '#ffe2ee');
-    ctx.fillStyle = g;
-    ctx.fillRect(0, 0, c.width, c.height);
-
-    ctx.globalAlpha = 0.18;
-    ctx.fillStyle = '#ff7faa';
-    for (let y = 40; y < c.height; y += 48) {
-      for (let x = (y / 48) % 2 ? 36 : 16; x < c.width; x += 64) {
-        ctx.beginPath();
-        ctx.arc(x, y, 4, 0, Math.PI * 2);
-        ctx.fill();
-      }
-    }
-    ctx.globalAlpha = 1;
-
-    const pad = 110;
-    const ex = pad, ey = 165, ew = c.width - pad * 2, eh = 360;
-
-    ctx.shadowColor = 'rgba(60,20,50,0.18)';
-    ctx.shadowBlur = 28;
-    ctx.shadowOffsetY = 18;
-
-    ctx.fillStyle = '#ffffff';
-    roundRect(ctx, ex, ey, ew, eh, 28);
-    ctx.fill();
-
-    ctx.shadowColor = 'transparent';
-
-    ctx.fillStyle = '#ffe8f2';
-    roundRect(ctx, ex + 10, ey + 10, ew - 20, eh - 20, 22);
-    ctx.fill();
-
-    ctx.strokeStyle = 'rgba(194,43,102,0.45)';
-    ctx.lineWidth = 10;
-    ctx.beginPath();
-    ctx.moveTo(ex + 26, ey + 30);
-    ctx.lineTo(ex + ew / 2, ey + eh / 2 + 18);
-    ctx.lineTo(ex + ew - 26, ey + 30);
-    ctx.stroke();
-
-    ctx.strokeStyle = 'rgba(194,43,102,0.35)';
-    ctx.lineWidth = 8;
-    ctx.beginPath();
-    ctx.moveTo(ex + 26, ey + eh - 30);
-    ctx.lineTo(ex + ew / 2, ey + eh / 2 + 18);
-    ctx.lineTo(ex + ew - 26, ey + eh - 30);
-    ctx.stroke();
-
-    ctx.fillStyle = 'rgba(255,63,134,0.55)';
-    ctx.beginPath();
-    ctx.arc(ex + ew / 2, ey + eh / 2 + 36, 34, 0, Math.PI * 2);
-    ctx.fill();
-
-    ctx.fillStyle = '#ffffff';
-    ctx.font = '700 44px "Baloo 2", sans-serif';
-    ctx.textAlign = 'center';
-    ctx.textBaseline = 'middle';
-    ctx.fillText('sealed', ex + ew / 2, ey + eh / 2 + 36);
-
-    envelopeImg.src = c.toDataURL('image/jpeg', 0.92);
-
-    function roundRect(ctx, x, y, w, h, r) {
-      ctx.beginPath();
-      ctx.moveTo(x + r, y);
-      ctx.arcTo(x + w, y, x + w, y + h, r);
-      ctx.arcTo(x + w, y + h, x, y + h, r);
-      ctx.arcTo(x, y + h, x, y, r);
-      ctx.arcTo(x, y, x + w, y, r);
-      ctx.closePath();
-    }
-  }
-
-  buildEnvelopeJPG();
-
-  function updateTapUI() {
-    tapCountPill.textContent = `Taps: ${taps} / ${TAPS_REQUIRED}`;
-    tapBar.style.width = `${(taps / TAPS_REQUIRED) * 100}%`;
-    tapHintPill.textContent = `Unlocked: ${letterUnlocked ? 'Yes' : 'No'}`;
-  }
-
-  function typeLetter() {
-  if (typing) return;
-  typing = true;
-
-  letterText.textContent = '';
-  const fullText = LETTER_P1 + "\n\n" + LETTER_P2;
-  let i = 0;
-
-  const caret = document.createElement('span');
-  caret.className = 'caret';
-  letterText.appendChild(caret);
-
-  const timer = setInterval(() => {
-    caret.insertAdjacentText('beforebegin', fullText[i] || '');
-    i++;
-    if (i >= fullText.length) {
-      clearInterval(timer);
-      caret.remove();
-      typing = false;
-
-      // ✅ confetti infinity MULAI setelah letter selesai muncul
-      startConfettiPage2();
-    }
-  }, 100);
+function setChibi(state){
+  chibi.src = CHIBI[state] || CHIBI.happy;
+}
+function setStatus(text){
+  statusLine.textContent = text;
 }
 
-  function unlockLetter() {
-    if (letterUnlocked) return;
-    letterUnlocked = true;
-    updateTapUI();
+/* NO kabur tapi tetap terlihat dalam area */
+function moveNoInside(){
+  const area = $("#controls");
+  const r = area.getBoundingClientRect();
+  const b = noBtn.getBoundingClientRect();
 
-    envelopeImg.classList.add('envelope-shake');
-    setTimeout(() => envelopeImg.classList.remove('envelope-shake'), 260);
+  const pad = 8;
+  const maxX = r.width - b.width - pad;
+  const maxY = r.height - b.height - pad;
 
-    setTimeout(typeLetter, 260);
-    document.querySelector('.envelope-panel')
-  ?.classList.add('unsealed');
+  const x = pad + Math.random() * Math.max(0, maxX);
+  const y = pad + Math.random() * Math.max(0, maxY);
+
+  noBtn.style.right = "auto";
+  noBtn.style.left = x + "px";
+  noBtn.style.top = y + "px";
+}
+
+noBtn.addEventListener("click", () => {
+  if(noLocked) return;
+
+  noClicks++;
+
+  if(noClicks === 1){
+    setChibi("confused");
+    setStatus('Chibi: "Wait... did you try to press NO?"');
+    moveNoInside();
+  } else if(noClicks === 2){
+    setChibi("annoyed");
+    setStatus('Chibi: "Stop it. My heart is lagging."');
+    moveNoInside();
+  } else if(noClicks === 3){
+    setChibi("angry");
+    setStatus('Chibi: "NO is illegal. I am calling the love police."');
+    errorModal.classList.add("show");
+    noLocked = true;
+  } else {
+    setChibi("angry");
+    setStatus('Chibi: "I SAID NO IS NOT AN OPTION."');
+  }
+});
+
+errorClose.addEventListener("click", () => {
+  errorModal.classList.remove("show");
+  setChibi("blush");
+  setStatus('Chibi: "Okay... now press YES. Please."');
+  yesBtn.classList.add("glow");
+});
+
+/* YES → cinematic transition → memories */
+yesBtn.addEventListener("click", () => {
+  showPage("transitionPage");
+  playTransition();
+});
+
+function playTransition(){
+  const flash = $("#flash");
+  const b1 = $("#b1"), b2 = $("#b2"), b3 = $("#b3");
+
+  flash.classList.remove("play");
+  [b1,b2,b3].forEach(x=>x.classList.remove("play"));
+
+  setTimeout(()=>flash.classList.add("play"), 30);
+  setTimeout(()=>b1.classList.add("play"), 80);
+  setTimeout(()=>b2.classList.add("play"), 160);
+  setTimeout(()=>b3.classList.add("play"), 240);
+
+  setTimeout(()=>{
+    showPage("memoriesPage");
+    spawnFloatingHearts();
+    startTypingLetter();
+    bindPhotoOpeners();
+  }, 1050);
+}
+
+/* =========================================================
+   MEMORIES: FLOATING HEARTS
+========================================================= */
+function spawnFloatingHearts(){
+  const container = $("#floatHearts");
+  container.innerHTML = "";
+  const count = 22;
+
+  for(let i=0;i<count;i++){
+    const h = document.createElement("div");
+    h.className = "float-heart";
+    h.style.left = (Math.random()*100) + "%";
+    h.style.animationDelay = (Math.random()*6) + "s";
+    h.style.animationDuration = (5 + Math.random()*6) + "s";
+    h.style.width = (12 + Math.random()*14) + "px";
+    h.style.height = h.style.width;
+
+    h.innerHTML = `
+      <svg viewBox="0 0 32 32" width="100%" height="100%">
+        <path d="M16 28s-10-6.2-10-14C6 10 8.5 7.5 12 7.5c2 0 3.4 1 4 2
+                 .6-1 2-2 4-2 3.5 0 6 2.5 6 6.5 0 7.8-10 14-10 14z"
+              fill="rgba(255,255,255,.92)"/>
+      </svg>
+    `;
+    container.appendChild(h);
+  }
+}
+
+/* =========================================================
+   MEMORIES: PHOTO MODAL OPEN
+========================================================= */
+let photoBound = false;
+
+function bindPhotoOpeners(){
+  if(photoBound) return;
+  photoBound = true;
+
+  const modal = $("#photoModal");
+  const close = $("#photoClose");
+  const view = $("#photoView");
+
+  function openPhoto(src){
+    view.src = src;
+    modal.classList.add("show");
   }
 
-  envelopeImg.addEventListener('click', () => {
-    if (letterUnlocked) return;
-
-    taps++;
-    if (taps > TAPS_REQUIRED) taps = TAPS_REQUIRED;
-
-    updateTapUI();
-
-    envelopeImg.classList.remove('envelope-shake');
-    void envelopeImg.offsetWidth;
-    envelopeImg.classList.add('envelope-shake');
-
-    if (taps >= TAPS_REQUIRED) unlockLetter();
+  // Polaroids
+  document.querySelectorAll(".polaroid").forEach(p=>{
+    p.addEventListener("click", ()=> openPhoto(p.getAttribute("data-photo")));
   });
 
-  updateTapUI();
+  // Thumbs
+  document.querySelectorAll(".thumb").forEach(t=>{
+    t.addEventListener("click", ()=> openPhoto(t.getAttribute("data-photo")));
+  });
 
-})();
+  close.addEventListener("click", ()=> modal.classList.remove("show"));
+  modal.addEventListener("click", (e)=>{
+    if(e.target === modal) modal.classList.remove("show");
+  });
+}
+
+/* =========================================================
+   MEMORIES: SWEET LETTER TYPING
+========================================================= */
+const letter = `My love,
+
+Today I’m choosing you — on purpose, with a full heart, and without hesitation.
+
+Thank you for being my favorite person.
+Thank you for turning ordinary moments into memories I want to keep forever.
+
+If love had a home, it would look like you.
+
+Happy Valentine’s Day.
+Forever yours. ❤️`;
+
+let ti = 0;
+let typingStarted = false;
+
+function startTypingLetter(){
+  if(typingStarted) return;
+  typingStarted = true;
+  ti = 0;
+  $("#letterText").textContent = "";
+  typeTick();
+}
+
+function typeTick(){
+  if(ti < letter.length){
+    $("#letterText").textContent += letter.charAt(ti);
+    ti++;
+    setTimeout(typeTick, 24);
+  }
+}
 </script>
 </body>
 </html>
